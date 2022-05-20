@@ -1,0 +1,33 @@
+class Solution {
+public:
+    int trap(vector<int>& height) 
+    {
+        int N=height.size();
+        
+        vector<int>heightl(N);
+        heightl[0]=0;
+        for(int i=1;i<N;i++)
+            heightl[i]=max(heightl[i-1],height[i-1]);
+        
+        vector<int>heightr(N);
+        heightr[N-1]=0;
+        for(int i=N-2;i>=0;i--)
+            heightr[i]=max(heightr[i+1],height[i+1]);
+        
+        for(auto el:heightl)
+            cout<<el<<" ";
+        cout<<endl;
+        for(auto el:heightr)
+            cout<<el<<" ";
+        
+        int ans=0;
+        for(int i=0;i<N;i++)
+        {
+            int res=min(heightl[i],heightr[i]);
+            int water=max(0,res-height[i]);
+            ans+=water;
+        }
+        return ans;
+        
+    }
+};
