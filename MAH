@@ -1,0 +1,70 @@
+class Solution {
+public:
+    int largestRectangleArea(vector<int>& heights) 
+    {
+        int N=heights.size();
+        //NSL -1
+        stack<pair<int,int>>s1;
+        vector<int>indexl(heights.size());
+        for(int i=0;i<N;i++)
+        {
+            if(s1.size()==0)
+            {
+                indexl[i]=-1;
+                s1.push({heights[i],i});
+            }
+            else if(s1.top().first>=heights[i])
+            {
+                while(s1.size()!=0&&s1.top().first>=heights[i])
+                    s1.pop();
+                if(s1.size()==0)
+                    indexl[i]=-1;
+                else
+                    indexl[i]=s1.top().second;
+                s1.push({heights[i],i});
+            }
+            else
+            {
+                indexl[i]=s1.top().second;
+                s1.push({heights[i],i});
+            }
+        }
+        
+        //NSR n+1
+        stack<pair<int,int>>s2;
+        vector<int>indexr(heights.size());
+        for(int i=N-1;i>=0;i--)
+        {
+            if(s2.size()==0)
+            {
+                indexr[i]=heights.size();
+                s2.push({heights[i],i});
+            }
+            else if(s2.top().first>=heights[i])
+            {
+                while(s2.size()!=0&&s2.top().first>=heights[i])
+                    s2.pop();
+                if(s2.size()==0)
+                    indexr[i]=heights.size();
+                else
+                    indexr[i]=s2.top().second;
+                s2.push({heights[i],i});
+            }
+            else
+            {
+                indexr[i]=s2.top().second;
+                s2.push({heights[i],i});
+            }
+        }
+        // for(auto el:indexl)
+        //     cout<<el<<" ";
+        // cout<<endl;
+        // for(auto el:indexr)
+        //     cout<<el<<" ";
+        // cout<<endl;
+        int ans=0;
+        for(int i=0;i<N;i++)
+            ans=max(ans,(indexr[i]-indexl[i]-1)*heights[i]);
+        return ans;
+    }
+};
