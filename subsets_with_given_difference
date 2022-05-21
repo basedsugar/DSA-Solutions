@@ -1,0 +1,26 @@
+int countPartitions(int n, int d, vector<int> &arr) 
+{
+    long long int mod=1e9+7;
+	int sum=0;
+	for(int i=0;i<n;i++)
+		sum+=arr[i]%mod;
+	if((sum+d)%2==1)
+		return 0;
+	int req=((sum%mod+d%mod)/2)%mod;
+	 long long int dp[n+1][req+1];
+        for(int j=0;j<=req;j++)
+            dp[0][j]=0;
+        for(int i=0;i<=n;i++)
+            dp[i][0]=1;
+        for(int i=1;i<=n;i++)
+        {
+            for(int j=0;j<=req;j++)
+            {
+                if(arr[i-1]<=j)
+                    dp[i][j]=dp[i-1][j]%mod+dp[i-1][j-arr[i-1]]%mod;
+                else
+                    dp[i][j]=dp[i-1][j]%mod;
+            }
+        }
+        return(dp[n][req]%mod);
+}
