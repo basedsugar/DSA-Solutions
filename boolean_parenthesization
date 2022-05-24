@@ -1,0 +1,60 @@
+class Solution{
+public:
+    int dp[201][201][2];
+    int countWays(int N, string S)
+    {
+        memset(dp,-1,sizeof(dp));
+        return find(S,0,N-1,1);
+    }
+    int find(string&s,int i,int j,int isTrue)
+    {
+        if(i>j)
+            return 0;
+        if(i==j)
+        {
+            if(isTrue==1)
+                if(s[i]=='T')
+                    return 1;
+                else
+                    return 0;
+            else
+                if(s[i]=='F')
+                    return 1;
+                else
+                    return 0;
+        }
+        if(dp[i][j][isTrue]!=-1)
+            return dp[i][j][isTrue];
+        int ans=0;
+        for(int k=i+1;k<j;k+=2)
+        {
+            int lf=find(s,i,k-1,0);
+            int rf=find(s,k+1,j,0);
+            int lt=find(s,i,k-1,1);
+            int rt=find(s,k+1,j,1);
+            if(s[k]=='|')
+            {
+                if(isTrue==1)
+                    ans+=(rt*lt+rf*lt+lf*rt);
+                else
+                    ans+=(rf*lf);
+            }
+            else if(s[k]=='&')
+            {
+                if(isTrue==1)
+                    ans+=(rt*lt);
+                else
+                    ans+=(rf*lf+lt*rf+lf*rt);
+            }
+            else if(s[k]=='^')
+            {
+                if(isTrue==1)
+                    ans+=(rf*lt+lf*rt);
+                else
+                    ans+=(rf*lf+rt*lt);
+            }
+        }
+        ans=ans%1003;
+        return dp[i][j][isTrue]=ans;
+    }
+};
