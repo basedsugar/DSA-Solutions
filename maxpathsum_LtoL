@@ -1,0 +1,22 @@
+int maxPathSum(Node* root)
+    {
+        if(root==NULL)
+            return 0;
+        int res=INT_MIN;
+        solve(root,res);
+        return res;
+    }
+    int solve(Node* root,int &res)
+    {
+        if(root==NULL)
+            return 0;
+        
+        int l=solve(root->left,res);
+        int r=solve(root->right,res);
+        
+        int temp=(root->data+max(l,r));
+        int ans=root->data+l+r;
+        res=max(res,ans);
+        
+        return temp;
+    }
