@@ -27,9 +27,9 @@ public:
         int l=solve(root->left,res);
         int r=solve(root->right,res);
         
-        int temp=1+max(l,r);
-        int ans=l+r;
-        res=max(ans,res);
+        int temp=1+max(l,r); // to be passed on to parent
+        int ans=l+r; // stores result considering current node as root node
+        res=max(ans,res); // final ans
         
         return temp;
     }
