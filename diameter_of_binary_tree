@@ -11,31 +11,26 @@
  */
 class Solution {
 public:
-    unordered_map<TreeNode*,int>dp;
-    unordered_map<TreeNode*,int>dp2;
     int diameterOfBinaryTree(TreeNode* root) 
     {
-        dp.clear();
-        dp2.clear();
-        return find(root);    
+        if(root==NULL)
+            return 0;
+        int res=INT_MIN;
+        solve(root,res);    
+        return res;
     }
-    int find(TreeNode* root)
+    int solve(TreeNode* root,int &res)
     {
         if(root==NULL)
             return 0;
-        if(dp[root])
-            return dp[root];
-        int curr=height(root->left)+height(root->right);
-        int l=find(root->left);
-        int r=find(root->right);
-        return dp[root]=max({curr,l,r});
-    }
-    int height(TreeNode* root)
-    {
-        if(root==NULL)
-            return 0;
-        if (dp2[root])
-            return dp2[root];
-        return dp2[root]=(1+max(height(root->left),height(root->right)));
+        
+        int l=solve(root->left,res);
+        int r=solve(root->right,res);
+        
+        int temp=1+max(l,r);
+        int ans=l+r;
+        res=max(ans,res);
+        
+        return temp;
     }
 };
