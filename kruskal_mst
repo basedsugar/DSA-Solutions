@@ -1,0 +1,61 @@
+class Solution
+{
+	public:
+	//Function to find sum of weights of edges of the Minimum Spanning Tree.
+	int findpar(int u,vector<int>&parent)
+	{
+	    if(parent[u]==u)
+	        return u;
+	    return parent[u]=findpar(parent[u],parent);
+	}
+	void unionn(int u,int v,vector<int>&parent,vector<int>&rank)
+	{
+	    u=findpar(u,parent);
+	    v=findpar(v,parent);
+	    if(rank[u]<rank[v])
+	        parent[u]=v;
+	    else if(rank[v]<rank[u])
+	        parent[v]=u;
+	    else
+	    {
+	        parent[v]=u;
+	        rank[u]++;
+	    }
+	}
+    int spanningTree(int V, vector<vector<int>> adj[])
+    {
+        vector<vector<int>>edges;//{weight,u,v}
+        for(int i=0;i<V;i++)
+        {
+            for(int j=0;j<adj[i].size();j++)
+            {
+                int wt=adj[i][j][1];
+                int u=i;
+                int v=adj[i][j][0];
+                vector<int>temp;
+                temp.push_back(wt);
+                temp.push_back(u);
+                temp.push_back(v);
+                edges.push_back(temp);
+            }
+        }
+        sort(edges.begin(),edges.end());
+        vector<int>parent(V);
+        for(int i=0;i<V;i++)
+            parent[i]=i;
+        vector<int>rank(V,0);
+        vector<vector<int>>mst;
+        for(int i=0;i<edges.size();i++)
+        {
+            if(findpar(edges[i][1],parent)!=findpar(edges[i][2],parent))
+            {
+                unionn(edges[i][1],edges[i][2],parent,rank);
+                mst.push_back(vector<int>{edges[i][0],edges[i][1],edges[i][2]});
+            }
+        }
+        int ans=0;
+        for(int i=0;i<mst.size();i++)
+            ans+=mst[i][0];
+        return ans;
+    }
+};
