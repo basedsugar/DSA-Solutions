@@ -1,0 +1,42 @@
+class Solution {
+  public:
+    void check(int node,int parent,int&timer,vector<int>&vis,vector<int>&disc,vector<int>&low,vector<int>adj[],vector<int>&ans)
+    {
+        vis[node]=1;
+        disc[node]=low[node]=timer++;
+        int children=0;
+        for(auto child:adj[node])
+        {
+            if(parent==child)
+                continue;
+            if(vis[child]==0)
+            {
+                check(child,node,timer,vis,disc,low,adj,ans);
+                children++;
+                low[node]=min(low[node],low[child]);
+                if(low[child]>=disc[node]&&parent!=-1)
+                    ans[node]=1;
+            }
+            else 
+                low[node]=min(low[node],disc[child]);
+        }
+        if(parent==-1&&children>1)
+            ans[node]=1;
+    }
+    vector<int> articulationPoints(int V, vector<int>adj[]) 
+    {
+        vector<int>vis(V,0),disc(V,-1),low(V,-1),ans(V,0);
+        int timer=0;
+        for(int i=0;i<V;i++)
+            if(vis[i]==0)
+                check(i,-1,timer,vis,disc,low,adj,ans);
+        vector<int>res;
+        for(int i=0;i<V;i++)
+            if(ans[i]==1)
+                res.push_back(i);
+        if(res.size()==0)
+            return vector<int>{-1};
+        return res;
+        
+    }
+};
